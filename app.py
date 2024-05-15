@@ -45,7 +45,7 @@ class Order:
         return sum(item.get_total_price() for item in self.items)
 
 menu_items = [
-    MenuItem("계란말이", 4000, "egg.jpg"),
+    MenuItem("계란말이", 6000, "egg.jpg"),
     MenuItem("제육볶음", 8000, "jeyouk.jpg"),
     MenuItem("떡갈비", 8000, "dduk.jpg"),
     MenuItem("소세지 야채볶음", 7000, "ssoya.jpg"),
