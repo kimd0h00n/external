@@ -1,6 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for
 import requests
 import os
+import logging
+from logging.handlers import RotatingFileHandler
+
+# 로깅 설정
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=3)
+logger.addHandler(handler)
 
 app = Flask(__name__)
 
@@ -101,8 +109,7 @@ def send_order_to_server(items, total):
         "total": total
     }
     response = requests.post(api_url, json=data, headers=headers)
-    print("Status Code:", response.status_code)
-    print("Response:", response.json())
+    logger.info(f"Status Code: {response.status_code}, Response: {response.json()}")
 
 def fetch_orders_from_server():
     api_url = os.getenv("API_URL", "http://localhost:5001/api/orders")
