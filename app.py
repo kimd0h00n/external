@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, session, render_template, request, redirect, url_for
+from flask_session import Session
 import requests
 import os
 import logging
@@ -11,6 +12,9 @@ handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=3)
 logger.addHandler(handler)
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'super-secret-key'
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
 class MenuItem:
     def __init__(self, name, price, image):
@@ -53,46 +57,53 @@ menu_items = [
     MenuItem("황도", 4000, "hwangdo.jpg")
 ]
 
-order = Order()
-
 @app.route('/')
 def index():
+    order = session.get('order', Order())
     return render_template('index.html', menu_items=menu_items, total=order.get_total())
 
 @app.route('/order', methods=['POST'])
 def order_menu():
+    order = session.get('order', Order())
     item_index = int(request.form.get('item_index'))
     quantity = int(request.form.get('quantity'))
     table_number = request.form.get('table_number')
     order.table_number = table_number
     order.add_item(OrderItem(menu_items[item_index], quantity))
+    session['order'] = order
     return redirect(url_for('index'))
 
 @app.route('/cart', methods=['GET'])
 def view_cart():
+    order = session.get('order', Order())
     return render_template('cart.html', order=order)
 
 @app.route('/update_table_number', methods=['POST'])
 def update_table_number():
+    order = session.get('order', Order())
     table_number = request.form.get('table_number')
     order.table_number = table_number
+    session['order'] = order
     return redirect(url_for('view_cart'))
 
 @app.route('/remove_item', methods=['POST'])
 def remove_item():
+    order = session.get('order', Order())
     item_name = request.form.get('item_name')
     order.remove_item(item_name)
+    session['order'] = order
     return redirect(url_for('view_cart'))
 
 @app.route('/checkout', methods=['POST'])
 def checkout():
+    order = session.get('order', Order())
     table_number = request.form.get('table_number')
     if not table_number:
         return redirect(url_for('view_cart'))
     order.table_number = table_number
     total = order.get_total()
     send_order_to_server(order.items, total)
-    order.items.clear()
+    session.pop('order', None)  # 주문 완료 후 세션에서 주문 정보 삭제
     return render_template('checkout.html', total=total)
 
 @app.route('/orders', methods=['GET'])
@@ -104,7 +115,7 @@ def send_order_to_server(items, total):
     api_url = os.getenv("API_URL", "https://port-0-server-1ru12mlw71p1z1.sel5.cloudtype.app/api/orders")
     headers = {'Content-Type': 'application/json'}
     data = {
-        "table_number": order.table_number,
+        "table_number": session.get('order', Order()).table_number,
         "items": [{"name": item.item.name, "price": item.item.price, "quantity": item.quantity} for item in items],
         "total": total
     }
