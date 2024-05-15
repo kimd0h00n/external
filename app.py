@@ -46,11 +46,11 @@ class Order:
 
 menu_items = [
     MenuItem("계란말이", 4000, "egg.jpg"),
-    MenuItem("황도", 4500, "hwangdo.jpg"),
-    MenuItem("제육볶음", 5500, "jeyouk.jpg"),
-    MenuItem("냉동 만두", 4000, "mandoo.jpg"),
-    MenuItem("오뎅탕", 4500, "odaeng.jpg"),
-    MenuItem("소세지 야채볶음", 5500, "ssoya.jpg")
+    MenuItem("제육볶음", 8000, "jeyouk.jpg"),
+    MenuItem("떡갈비", 8000, "dduk.jpg"),
+    MenuItem("소세지 야채볶음", 7000, "ssoya.jpg"),
+    MenuItem("어묵탕", 4000, "odaeng.jpg"),
+    MenuItem("황도", 4000, "hwangdo.jpg")
 ]
 
 order = Order()
