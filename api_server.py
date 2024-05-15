@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+import os
 
 app = Flask(__name__)
 
@@ -17,6 +18,14 @@ def get_orders():
         return jsonify({'status': 'success', 'orders': orders}), 200
     return render_template('orders.html', orders=orders)
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return jsonify({'error': 'Not Found', 'status': 404}), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return jsonify({'error': 'Internal Server Error', 'status': 500}), 500
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    port = int(os.getenv("PORT", 5001))
+    app.run(host='0.0.0.0', port=port, debug=False)
