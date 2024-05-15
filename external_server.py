@@ -27,4 +27,4 @@ def receive_order():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)  # 포트 번호는 필요에 따라 변경
+    app.run(debug=True, port=5001)  # 포트 번호는 필요에 따라 변경
