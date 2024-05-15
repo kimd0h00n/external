@@ -101,7 +101,7 @@ def get_orders():
     return render_template('orders.html', orders=orders)
 
 def send_order_to_server(items, total):
-    api_url = os.getenv("API_URL", "http://localhost:5001/api/orders")
+    api_url = os.getenv("API_URL", "https://port-0-server-1ru12mlw71p1z1.sel5.cloudtype.app/")
     headers = {'Content-Type': 'application/json'}
     data = {
         "table_number": order.table_number,
@@ -112,7 +112,7 @@ def send_order_to_server(items, total):
     logger.info(f"Status Code: {response.status_code}, Response: {response.json()}")
 
 def fetch_orders_from_server():
-    api_url = os.getenv("API_URL", "http://localhost:5001/api/orders")
+    api_url = os.getenv("API_URL", "https://port-0-server-1ru12mlw71p1z1.sel5.cloudtype.app/")
     response = requests.get(api_url)
     if response.status_code == 200:
         return response.json().get('orders', [])
