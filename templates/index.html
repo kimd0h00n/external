@@ -3,20 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Menu</title>
-    <style>
-        img {
-            width: 100px;  /* 이미지 크기 조정 */
-            height: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>공대생이 만든</h1>
     <h1>메뉴판</h1>
     {% for item in menu_items %}
-    <div>
+    <div class="menu-item">
         <h2>{{ item.name }}</h2>
-        <img src="{{ url_for('static', filename=item.image) }}" alt="{{ item.name }}">
+        <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}">
         <p>Price: {{ item.price }} KRW</p>
         <form action="{{ url_for('order_menu') }}" method="POST">
             <label for="quantity">Quantity:</label>
@@ -27,7 +22,8 @@
     </div>
     {% endfor %}
     <form action="{{ url_for('view_cart') }}" method="GET">
-        <button style="font-size:1.4em;", type="submit">장바구니 가기</button>
-    <p>Total: {{ total }} KRW</p>
+        <button class="cart-button" type="submit">장바구니 가기</button>
+    </form>
+    <p class="total-price">Total: {{ total }} KRW</p>
 </body>
 </html>
