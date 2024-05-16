@@ -3,40 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Cart</title>
-    <style>
-        img {
-            width: 100px;  /* 이미지 크기 조정 */
-            height: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles1.css') }}">
 </head>
 <body>
     <h1>Your Cart</h1>
-
-    {% if order.items %}
-        {% for order_item in order.items %}
-        <div>
-            <img src="{{ url_for('static', filename=order_item.item.image) }}" alt="{{ order_item.item.name }}">
-            <h2>{{ order_item.item.name }}</h2>
-            <p>Price: {{ order_item.item.price }} KRW</p>
-            <p>Quantity: {{ order_item.quantity }}</p>
-            <p>Total Price: {{ order_item.get_total_price() }} KRW</p>
-            <form action="{{ url_for('remove_item') }}" method="POST">
-                <input type="hidden" name="item_name" value="{{ order_item.item.name }}">
-                <button type="submit">Remove</button>
-            </form>
+    <div class="cart-container">
+        {% if order.items %}
+            {% for order_item in order.items %}
+            <div class="cart-item">
+                <img src="{{ url_for('static', filename=order_item.item.image) }}" alt="{{ order_item.item.name }}">
+                <div class="cart-item-details">
+                    <h2>{{ order_item.item.name }}</h2>
+                    <p>Price: {{ order_item.item.price }} KRW</p>
+                    <p>Quantity: {{ order_item.quantity }}</p>
+                    <p>Total Price: {{ order_item.get_total_price() }} KRW</p>
+                </div>
+                <form action="{{ url_for('remove_item') }}" method="POST">
+                    <input type="hidden" name="item_name" value="{{ order_item.item.name }}">
+                    <button type="submit">Remove</button>
+                </form>
+            </div>
+            {% endfor %}
+            <p class="cart-total">Total: {{ order.get_total() }} KRW</p>
+            <div class="cart-checkout">
+                <form action="{{ url_for('checkout') }}" method="POST" onsubmit="return validateForm()">
+                    <label for="table_number">테이블 번호:</label>
+                    <input type="text" name="table_number" id="table_number" required>
+                    <button type="submit">결제하기</button>
+                </form>
+            </div>
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}
+        <div class="cart-continue">
+            <a href="{{ url_for('index') }}">쇼핑 계속하기</a>
         </div>
-        {% endfor %}
-        <p>Total: {{ order.get_total() }} KRW</p>
-        <form action="{{ url_for('checkout') }}" method="POST" onsubmit="return validateForm()">
-            <label style="font-size:1.4em;", for="table_number">테이블 번호:</label>
-            <input style="font-size:1.4em;", type="text" name="table_number" id="table_number" required>
-            <button style="font-size:1.4em;", type="submit">결제하기</button>
-        </form>
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
-    <a style="font-size:1.2em;" href="{{ url_for('index') }}">쇼핑 계속하기</a>
+    </div>
 
     <script>
         function validateForm() {
