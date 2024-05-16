@@ -32,7 +32,10 @@
     <h1>주문 내역</h1>
     {% if orders %}
         {% for order in orders %}
-            <h2>주문 {{ loop.index }} (테이블 번호: {{ order['table_number'] }})</h2>
+            <h2>
+                주문 {{ loop.index }} (테이블 번호: {{ order['table_number'] }})
+                <input type="checkbox" class="table-checkbox" data-table-number="{{ order['table_number'] }}">
+            </h2>
             <table class="order-table">
                 <thead>
                     <tr>
@@ -63,5 +66,26 @@
     {% else %}
         <p>주문 내역이 없습니다.</p>
     {% endif %}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.table-checkbox');
+            
+            // Load saved checkbox states
+            checkboxes.forEach(checkbox => {
+                const tableNumber = checkbox.getAttribute('data-table-number');
+                const isChecked = localStorage.getItem('checkbox_' + tableNumber) === 'true';
+                checkbox.checked = isChecked;
+            });
+
+            // Save checkbox states on change
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    const tableNumber = checkbox.getAttribute('data-table-number');
+                    localStorage.setItem('checkbox_' + tableNumber, checkbox.checked);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
