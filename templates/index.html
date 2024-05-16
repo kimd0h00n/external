@@ -11,7 +11,7 @@
     {% for item in menu_items %}
     <div class="menu-item">
         <h2>{{ item.name }}</h2>
-        <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}">
+        <img src="{{ url_for('static', filename=item.image) }}" alt="{{ item.name }}">
         <p>Price: {{ item.price }} KRW</p>
         <form action="{{ url_for('order_menu') }}" method="POST">
             <label for="quantity">Quantity:</label>
