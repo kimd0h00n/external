@@ -50,8 +50,8 @@ class Order:
 
 menu_items = [
     MenuItem("계란말이", 6000, "egg.jpg"),
-    MenuItem("제육볶음", 8000, "jeyouk.jpg"),
-    MenuItem("떡갈비", 8000, "dduk.jpg"),
+    MenuItem("제육볶음", 9000, "jeyouk.jpg"),
+    MenuItem("떡갈비", 7000, "dduk.jpg"),
     MenuItem("소세지 야채볶음", 7000, "ssoya.jpg"),
     MenuItem("어묵탕", 4000, "odaeng.jpg"),
     MenuItem("황도", 4000, "hwangdo.jpg")
