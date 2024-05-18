@@ -1,4 +1,4 @@
-from flask import Flask, session, render_template, request, redirect, url_for, flash
+from flask import Flask, session, render_template, request, redirect, url_for, flash, jsonify
 from flask_session import Session
 import requests
 import os
@@ -67,8 +67,8 @@ single_items = [
 
 # 세트 메뉴 리스트
 set_menus = [
-    MenuItem("어제쏘 세트 (제육 + 쏘야 + 어묵탕)", 23000, "set1.jpg", 10),
-    MenuItem("퀴리부부 세트 (떡갈비 + 어묵탕)", 14000, "set2.jpg", 10)
+    MenuItem("4인 세트", 23000, "set1.jpg", 10),
+    MenuItem("퀴리부부 세트", 14000, "set2.jpg", 10)
 ]
 
 @app.route('/')
@@ -158,6 +158,19 @@ def fetch_orders_from_server():
     if response.status_code == 200:
         return response.json().get('orders', [])
     return []
+
+@app.route('/inventory', methods=['GET'])
+def get_inventory():
+    inventory = {
+        'single_items': [
+            {'name': item.name, 'inventory': item.inventory} for item in single_items
+        ],
+        'set_menus': [
+            {'name': item.name, 'inventory': item.inventory} for item in set_menus
+        ]
+    }
+    return jsonify(inventory)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.getenv("PORT", 5000)), debug=False)
