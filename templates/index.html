@@ -7,16 +7,57 @@
     <style>
         body {
             background-image: url("{{ url_for('static', filename='back.jpg') }}");
-            background-size: cover; /* 배경 이미지를 화면에 꽉 차게 */
-            background-position: center; /* 배경 이미지를 중앙에 위치 */
-            background-repeat: no-repeat; /* 배경 이미지 반복 금지 */
-            background-attachment: fixed; /* 배경 이미지 고정 */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: purple;
+            text-align: center;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .menu-item {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+        }
+        .menu-item h2 {
+            color: #333;
+        }
+        .menu-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .cart-button, button {
+            background-color: purple;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .cart-button:hover, button:hover {
+            background-color: darkpurple;
+        }
+        .total-price {
+            text-align: center;
+            font-size: 1.5em;
+            color: purple;
+            font-weight: bold;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1 style="color: purple;">공대생이 만든</h1>
-    <h1 style="color: purple;">메뉴판</h1>
+    <h1>공대생이 만든</h1>
+    <h1>메뉴판</h1>
     {% for item in menu_items %}
     <div class="menu-item">
         <h2>{{ item.name }}</h2>
