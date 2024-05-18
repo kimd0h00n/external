@@ -1,5 +1,6 @@
 from flask import Flask, session, render_template, request, redirect, url_for, flash, jsonify
 from flask_session import Session
+from flask_socketio import SocketIO, emit
 import requests
 import os
 import logging
@@ -17,6 +18,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'super-secret-key'
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
+socketio = SocketIO(app)
 
 class MenuItem:
     def __init__(self, name, price, image, inventory):
@@ -159,18 +161,49 @@ def fetch_orders_from_server():
         return response.json().get('orders', [])
     return []
 
-@app.route('/inventory', methods=['GET'])
-def get_inventory():
+def update_inventory():
     inventory = {
-        'single_items': [
-            {'name': item.name, 'inventory': item.inventory} for item in single_items
-        ],
-        'set_menus': [
-            {'name': item.name, 'inventory': item.inventory} for item in set_menus
-        ]
+        'single_items': [{'name': item.name, 'inventory': item.inventory} for item in single_items],
+        'set_menus': [{'name': item.name, 'inventory': item.inventory} for item in set_menus]
     }
-    return jsonify(inventory)
+    socketio.emit('update_inventory', inventory)
 
+@app.route('/order', methods=['POST'])
+def order_menu():
+    order = session.get('order', Order())
+    item_index = int(request.form.get('item_index'))
+    item_type = request.form.get('item_type')
+    quantity = int(request.form.get('quantity'))
+    table_number = request.form.get('table_number')
+    order.table_number = table_number
+
+    if item_type == 'single':
+        menu_item = single_items[item_index]
+    else:
+        menu_item = set_menus[item_index]
+
+    if menu_item.inventory < quantity:
+        flash(f"Sorry, we only have {menu_item.inventory} of {menu_item.name} left.")
+        return redirect(url_for('index'))
+
+    menu_item.inventory -= quantity
+    order.add_item(OrderItem(menu_item, quantity))
+    session['order'] = order
+    update_inventory()  # Emit the updated inventory to all clients
+    return redirect(url_for('index'))
+
+@app.route('/remove_item', methods=['POST'])
+def remove_item():
+    order = session.get('order', Order())
+    item_name = request.form.get('item_name')
+    for item in single_items + set_menus:
+        if item.name == item_name:
+            item.inventory += next((order_item.quantity for order_item in order.items if order_item.item.name == item_name), 0)
+            break
+    order.remove_item(item_name)
+    session['order'] = order
+    update_inventory()  # Emit the updated inventory to all clients
+    return redirect(url_for('view_cart'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.getenv("PORT", 5000)), debug=False)
