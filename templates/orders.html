@@ -87,5 +87,25 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.table-checkbox');
+            
+            // Load saved checkbox states
+            checkboxes.forEach(checkbox => {
+                const tableNumber = checkbox.getAttribute('data-table-number');
+                const isChecked = localStorage.getItem('checkbox_' + tableNumber) === 'true';
+                checkbox.checked = isChecked;
+            });
+
+            // Save checkbox states on change
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    const tableNumber = checkbox.getAttribute('data-table-number');
+                    localStorage.setItem('checkbox_' + tableNumber, checkbox.checked);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
