@@ -4,9 +4,82 @@
     <meta charset="UTF-8">
     <title>Menu</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='back.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
+        .title-container {
+            text-align: center;
+        }
+        h1 {
+            position: relative;
+            display: inline-block;
+            color: black;
+            text-align: center;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            margin: 20px 0;
+        }
+        h1::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9); /* 투명도 조정 */
+            z-index: -1;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .menu-item {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9); /* 투명도 조정 */
+            text-align: center;
+        }
+        .menu-item h2 {
+            color: #333;
+        }
+        .menu-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .cart-button, button {
+            background-color: purple;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .cart-button:hover, button:hover {
+            background-color: darkpurple;
+        }
+        .total-price {
+            text-align: center;
+            font-size: 1.5em;
+            color: purple;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>공대생이 만든 메뉴판</h1>
+    <div class="title-container">
+        <h1>공대생이 만든</h1>
+        <h1>메뉴판</h1>
+    </div>
     {% for item in menu_items %}
     <div class="menu-item">
         <h2>{{ item.name }}</h2>
