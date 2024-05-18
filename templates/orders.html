@@ -41,10 +41,10 @@
                 주문 {{ loop.index }} (테이블 번호: {{ order['table_number'] }})
                 <div class="checkbox-group">
                     <label>
-                        <input type="checkbox" class="payment-checkbox" data-order-number="{{ order['order_number'] }}"> 입금 확인
+                        <input type="checkbox" class="payment-checkbox" data-order-number="{{ order['order_number'] }}-payment"> 입금 확인
                     </label>
                     <label>
-                        <input type="checkbox" class="serving-checkbox" data-order-number="{{ order['order_number'] }}"> 서빙 완료
+                        <input type="checkbox" class="serving-checkbox" data-order-number="{{ order['order_number'] }}-serving"> 서빙 완료
                     </label>
                 </div>
             </h2>
@@ -87,13 +87,13 @@
             // Load saved checkbox states
             paymentCheckboxes.forEach(checkbox => {
                 const orderNumber = checkbox.getAttribute('data-order-number');
-                const isChecked = localStorage.getItem('payment_checkbox_' + orderNumber) === 'true';
+                const isChecked = localStorage.getItem('checkbox_' + orderNumber) === 'true';
                 checkbox.checked = isChecked;
             });
 
             servingCheckboxes.forEach(checkbox => {
                 const orderNumber = checkbox.getAttribute('data-order-number');
-                const isChecked = localStorage.getItem('serving_checkbox_' + orderNumber) === 'true';
+                const isChecked = localStorage.getItem('checkbox_' + orderNumber) === 'true';
                 checkbox.checked = isChecked;
             });
 
@@ -101,14 +101,14 @@
             paymentCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
                     const orderNumber = checkbox.getAttribute('data-order-number');
-                    localStorage.setItem('payment_checkbox_' + orderNumber, checkbox.checked);
+                    localStorage.setItem('checkbox_' + orderNumber, checkbox.checked);
                 });
             });
 
             servingCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
                     const orderNumber = checkbox.getAttribute('data-order-number');
-                    localStorage.setItem('serving_checkbox_' + orderNumber, checkbox.checked);
+                    localStorage.setItem('checkbox_' + orderNumber, checkbox.checked);
                 });
             });
         });
