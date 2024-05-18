@@ -78,29 +78,6 @@ def index():
     order = session.get('order', Order())
     return render_template('index.html', single_items=single_items, set_menus=set_menus, total=order.get_total())
 
-@app.route('/order', methods=['POST'])
-def order_menu():
-    order = session.get('order', Order())
-    item_index = int(request.form.get('item_index'))
-    item_type = request.form.get('item_type')
-    quantity = int(request.form.get('quantity'))
-    table_number = request.form.get('table_number')
-    order.table_number = table_number
-
-    if item_type == 'single':
-        menu_item = single_items[item_index]
-    else:
-        menu_item = set_menus[item_index]
-
-    if menu_item.inventory < quantity:
-        flash(f"Sorry, we only have {menu_item.inventory} of {menu_item.name} left.")
-        return redirect(url_for('index'))
-
-    menu_item.inventory -= quantity
-    order.add_item(OrderItem(menu_item, quantity))
-    session['order'] = order
-    return redirect(url_for('index'))
-
 @app.route('/cart', methods=['GET'])
 def view_cart():
     order = session.get('order', Order())
