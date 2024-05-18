@@ -55,7 +55,7 @@ menu_items = [
     MenuItem("보일 랑말랑한 어묵탕", 4000, "odaeng.jpg"),
     MenuItem("장영실의 최애 떡갈비", 7000, "dduk.jpg"),
     MenuItem("뉴턴의 사과 아닌 황도", 4000, "hwangdo.jpg"),
-    MenuItem("그냥 물", 500, "water.jpg")
+    MenuItem("우리 몸에서 70%를 차지하고, 끓는점 373.14K, 녹는점 273.14K, 밀도는 4'C에서 가장 큰, 무색 무취의 액체", 500, "water.jpg")
 ]
 
 @app.route('/')
