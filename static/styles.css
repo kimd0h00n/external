@@ -1,8 +1,10 @@
 body {
+    background-image: url("{{ url_for('static', filename='back.jpg') }}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 20px;
 }
 
 .title-container {
@@ -35,7 +37,7 @@ h1::before {
 }
 
 .menu-item {
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.9);
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 20px;
