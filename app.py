@@ -67,8 +67,8 @@ single_items = [
 
 # 세트 메뉴 리스트
 set_menus = [
-    MenuItem("4인 세트", 23000, "set1.jpg", 10),
-    MenuItem("퀴리부부 세트", 14000, "set2.jpg", 10)
+    MenuItem("4인 세트 (제육 + 쏘야 + 어묵탕)", 23000, "set1.jpg", 10),
+    MenuItem("퀴리부부 세트 (떡갈비 + 어묵탕)", 14000, "set2.jpg", 10)
 ]
 
 @app.route('/')
