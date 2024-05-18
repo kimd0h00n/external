@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <title>Menu</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='back.jpg') }}");
+            background-size: cover; /* 배경 이미지를 화면에 꽉 차게 */
+            background-position: center; /* 배경 이미지를 중앙에 위치 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 금지 */
+            background-attachment: fixed; /* 배경 이미지 고정 */
+        }
+    </style>
 </head>
 <body>
     <h1>공대생이 만든</h1>
@@ -25,9 +34,5 @@
         <button class="cart-button" type="submit">장바구니 가기</button>
     </form>
     <p class="total-price">Total: {{ total }} KRW</p>
-
-    <div class="extra-image">
-        <img src="{{ url_for('static', filename='back.jpg')}}" alt = "Extra Image">
-    </div>
 </body>
 </html>
