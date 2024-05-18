@@ -49,12 +49,13 @@ class Order:
         return sum(item.get_total_price() for item in self.items)
 
 menu_items = [
-    MenuItem("계란말이", 6000, "egg.jpg"),
-    MenuItem("제육볶음", 9000, "jeyouk.jpg"),
-    MenuItem("떡갈비", 7000, "dduk.jpg"),
-    MenuItem("소세지 야채볶음", 7000, "ssoya.jpg"),
-    MenuItem("어묵탕", 4000, "odaeng.jpg"),
-    MenuItem("황도", 4000, "hwangdo.jpg")
+    MenuItem("슈뢰딩거의 고..에란말이", 6000, "egg.jpg"),
+    MenuItem("오일러.. 볶은 제육볶음", 9000, "jeyouk.jpg"),
+    MenuItem("하버의 독일 소세지 야채볶음", 7000, "ssoya.jpg"),
+    MenuItem("보일 랑말랑한 어묵탕", 4000, "odaeng.jpg"),
+    MenuItem("장영실의 최애 떡갈비", 7000, "dduk.jpg"),
+    MenuItem("뉴턴의 사과 아닌 황도", 4000, "hwangdo.jpg")
+    MenuItem("그냥 물", 500, "water.jpg")
 ]
 
 @app.route('/')
