@@ -48,7 +48,8 @@ class Order:
     def get_total(self):
         return sum(item.get_total_price() for item in self.items)
 
-menu_items = [
+# 단품 메뉴 리스트
+single_items = [
     MenuItem("슈뢰딩거의 고..에란말이", 6000, "egg.jpg"),
     MenuItem("오일러.. 볶은 제육볶음", 9000, "jeyouk.jpg"),
     MenuItem("하버의 독일 소세지 야채볶음", 7000, "ssoya.jpg"),
@@ -58,19 +59,32 @@ menu_items = [
     MenuItem("우리 몸에서 70%를 차지하고, 끓는점 373.14K, 녹는점 273.14K, 밀도는 4'C에서 가장 큰, 무색 무취의 액체", 500, "water.jpg")
 ]
 
+# 세트 메뉴 리스트
+set_menus = [
+    MenuItem("뉴턴의 사과 아닌 황도 세트 1", 4000, "hwangdo.jpg"),
+    MenuItem("뉴턴의 사과 아닌 황도 세트 2", 4000, "hwangdo.jpg")
+]
+
 @app.route('/')
 def index():
     order = session.get('order', Order())
-    return render_template('index.html', menu_items=menu_items, total=order.get_total())
+    return render_template('index.html', single_items=single_items, set_menus=set_menus, total=order.get_total())
 
 @app.route('/order', methods=['POST'])
 def order_menu():
     order = session.get('order', Order())
     item_index = int(request.form.get('item_index'))
+    item_type = request.form.get('item_type')
     quantity = int(request.form.get('quantity'))
     table_number = request.form.get('table_number')
     order.table_number = table_number
-    order.add_item(OrderItem(menu_items[item_index], quantity))
+    
+    if item_type == 'single':
+        menu_item = single_items[item_index]
+    else:
+        menu_item = set_menus[item_index]
+    
+    order.add_item(OrderItem(menu_item, quantity))
     session['order'] = order
     return redirect(url_for('index'))
 
