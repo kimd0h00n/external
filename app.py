@@ -1,4 +1,4 @@
-from flask import Flask, session, render_template, request, redirect, url_for
+from flask import Flask, session, render_template, request, redirect, url_for, flash
 from flask_session import Session
 import requests
 import os
@@ -11,16 +11,22 @@ logger.setLevel(logging.INFO)
 handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=3)
 logger.addHandler(handler)
 
+# ... existing imports ...
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'super-secret-key'
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 class MenuItem:
-    def __init__(self, name, price, image):
+    def __init__(self, name, price, image, inventory):
         self.name = name
         self.price = price
         self.image = image
+        self.inventory = inventory
+
+    def is_sold_out(self):
+        return self.inventory <= 0
 
 class OrderItem:
     def __init__(self, item, quantity):
@@ -50,19 +56,19 @@ class Order:
 
 # 단품 메뉴 리스트
 single_items = [
-    MenuItem("슈뢰딩거의 고..에란말이", 6000, "egg.jpg"),
-    MenuItem("오일러.. 볶은 제육볶음", 9000, "jeyouk.jpg"),
-    MenuItem("하버의 독일 소세지 야채볶음", 7000, "ssoya.jpg"),
-    MenuItem("보일 랑말랑한 어묵탕", 8000, "odaeng.jpg"),
-    MenuItem("장영실의 최애 떡갈비", 7000, "dduk.jpg"),
-    MenuItem("뉴턴의 사과 아닌 황도", 4000, "hwangdo.jpg"),
-    MenuItem("우리 몸에서 70%를 차지하고, 끓는점 373.14K, 녹는점 273.14K, 밀도는 4'C에서 가장 큰, 무색 무취의 액체", 500, "water.jpg")
+    MenuItem("슈뢰딩거의 고..에란말이", 6000, "egg.jpg", 25),
+    MenuItem("오일러.. 볶은 제육볶음", 9000, "jeyouk.jpg", 20),
+    MenuItem("하버의 독일 소세지 야채볶음", 7000, "ssoya.jpg", 40),
+    MenuItem("보일 랑말랑한 어묵탕", 8000, "odaeng.jpg", 5),
+    MenuItem("장영실의 최애 떡갈비", 7000, "dduk.jpg", 26),
+    MenuItem("뉴턴의 사과 아닌 황도", 4000, "hwangdo.jpg", 48),
+    MenuItem("우리 몸에서 70%를 차지하고, 끓는점 373.14K, 녹는점 273.14K, 밀도는 4'C에서 가장 큰, 무색 무취의 액체", 500, "water.jpg", 150)
 ]
 
 # 세트 메뉴 리스트
 set_menus = [
-    MenuItem("뉴턴의 사과 아닌 황도 세트 1", 4000, "hwangdo.jpg"),
-    MenuItem("뉴턴의 사과 아닌 황도 세트 2", 4000, "hwangdo.jpg")
+    MenuItem("4인 세트", 23000, "set1.jpg", 10),
+    MenuItem("퀴리부부 세트", 14000, "set2.jpg", 10)
 ]
 
 @app.route('/')
@@ -78,12 +84,17 @@ def order_menu():
     quantity = int(request.form.get('quantity'))
     table_number = request.form.get('table_number')
     order.table_number = table_number
-    
+
     if item_type == 'single':
         menu_item = single_items[item_index]
     else:
         menu_item = set_menus[item_index]
-    
+
+    if menu_item.inventory < quantity:
+        flash(f"Sorry, we only have {menu_item.inventory} of {menu_item.name} left.")
+        return redirect(url_for('index'))
+
+    menu_item.inventory -= quantity
     order.add_item(OrderItem(menu_item, quantity))
     session['order'] = order
     return redirect(url_for('index'))
@@ -105,6 +116,10 @@ def update_table_number():
 def remove_item():
     order = session.get('order', Order())
     item_name = request.form.get('item_name')
+    for item in single_items + set_menus:
+        if item.name == item_name:
+            item.inventory += next((order_item.quantity for order_item in order.items if order_item.item.name == item_name), 0)
+            break
     order.remove_item(item_name)
     session['order'] = order
     return redirect(url_for('view_cart'))
