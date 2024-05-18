@@ -52,7 +52,7 @@ menu_items = [
     MenuItem("슈뢰딩거의 고..에란말이", 6000, "egg.jpg"),
     MenuItem("오일러.. 볶은 제육볶음", 9000, "jeyouk.jpg"),
     MenuItem("하버의 독일 소세지 야채볶음", 7000, "ssoya.jpg"),
-    MenuItem("보일 랑말랑한 어묵탕", 4000, "odaeng.jpg"),
+    MenuItem("보일 랑말랑한 어묵탕", 8000, "odaeng.jpg"),
     MenuItem("장영실의 최애 떡갈비", 7000, "dduk.jpg"),
     MenuItem("뉴턴의 사과 아닌 황도", 4000, "hwangdo.jpg"),
     MenuItem("우리 몸에서 70%를 차지하고, 끓는점 373.14K, 녹는점 273.14K, 밀도는 4'C에서 가장 큰, 무색 무취의 액체", 500, "water.jpg")
