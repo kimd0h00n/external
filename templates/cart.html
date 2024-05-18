@@ -27,7 +27,7 @@
             <p class="cart-total">Total: {{ order.get_total() }} KRW</p>
             <div class="cart-checkout">
                 <form action="{{ url_for('checkout') }}" method="POST" onsubmit="return validateForm()">
-                    <label for="table_number">테이블 번호:</label>
+                    <label for="table_number">테이블 번호와 입금자명:</label>
                     <input type="text" name="table_number" id="table_number" required>
                     <button type="submit">결제하기</button>
                 </form>
