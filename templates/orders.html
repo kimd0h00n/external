@@ -26,6 +26,11 @@
         h2 {
             margin-top: 40px;
         }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
@@ -34,7 +39,14 @@
         {% for order in orders %}
             <h2>
                 주문 {{ loop.index }} (테이블 번호: {{ order['table_number'] }})
-                <input type="checkbox" class="table-checkbox" data-table-number="{{ order['table_number'] }}">
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" class="payment-checkbox" data-table-number="{{ order['table_number'] }}"> 입금 확인
+                    </label>
+                    <label>
+                        <input type="checkbox" class="serving-checkbox" data-table-number="{{ order['table_number'] }}"> 서빙 완료
+                    </label>
+                </div>
             </h2>
             <table class="order-table">
                 <thead>
@@ -69,40 +81,34 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const checkboxes = document.querySelectorAll('.table-checkbox');
+            const paymentCheckboxes = document.querySelectorAll('.payment-checkbox');
+            const servingCheckboxes = document.querySelectorAll('.serving-checkbox');
             
             // Load saved checkbox states
-            checkboxes.forEach(checkbox => {
+            paymentCheckboxes.forEach(checkbox => {
                 const tableNumber = checkbox.getAttribute('data-table-number');
-                const isChecked = localStorage.getItem('checkbox_' + tableNumber) === 'true';
+                const isChecked = localStorage.getItem('payment_checkbox_' + tableNumber) === 'true';
+                checkbox.checked = isChecked;
+            });
+
+            servingCheckboxes.forEach(checkbox => {
+                const tableNumber = checkbox.getAttribute('data-table-number');
+                const isChecked = localStorage.getItem('serving_checkbox_' + tableNumber) === 'true';
                 checkbox.checked = isChecked;
             });
 
             // Save checkbox states on change
-            checkboxes.forEach(checkbox => {
+            paymentCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
                     const tableNumber = checkbox.getAttribute('data-table-number');
-                    localStorage.setItem('checkbox_' + tableNumber, checkbox.checked);
+                    localStorage.setItem('payment_checkbox_' + tableNumber, checkbox.checked);
                 });
             });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const checkboxes = document.querySelectorAll('.table-checkbox');
-            
-            // Load saved checkbox states
-            checkboxes.forEach(checkbox => {
-                const tableNumber = checkbox.getAttribute('data-table-number');
-                const isChecked = localStorage.getItem('checkbox_' + tableNumber) === 'true';
-                checkbox.checked = isChecked;
-            });
 
-            // Save checkbox states on change
-            checkboxes.forEach(checkbox => {
+            servingCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
                     const tableNumber = checkbox.getAttribute('data-table-number');
-                    localStorage.setItem('checkbox_' + tableNumber, checkbox.checked);
+                    localStorage.setItem('serving_checkbox_' + tableNumber, checkbox.checked);
                 });
             });
         });
