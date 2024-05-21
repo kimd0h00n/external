@@ -56,7 +56,7 @@ class Order:
 
 # 단품 메뉴 리스트
 single_items = [
-    MenuItem("슈뢰딩거의 고..에란말이", 6000, "egg.jpg", 25),
+    MenuItem("슈뢰딩거의 고..에란말이", 6000, "egg.jpg", 0),
     MenuItem("오일러.. 볶은 제육볶음", 9000, "jeyouk.jpg", 20),
     MenuItem("하버의 독일 소세지 야채볶음", 7000, "ssoya.jpg", 40),
     MenuItem("보일 랑말랑한 어묵탕", 8000, "odaeng.jpg", 1),
